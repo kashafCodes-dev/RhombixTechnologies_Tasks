@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kashaf Fatima | Creative Technologist & Web devloper </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/ScrollTrigger.min.js"></script>
+  
+    <style>
+        :root {
+            --neon-cyan: #00f3ff;
+            --neon-pink: #ff00ff;
+            --neon-purple: #bc13fe;
+            --neon-blue: #0066ff;
+            --dark-bg: #0a0a0f;
+            --glass: rgba(255, 255, 255, 0.03);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--dark-bg);
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .font-orbitron {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        /* Animated Background */
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Neon Glow Effects */
+        .neon-text {
+            text-shadow: 
+                0 0 10px var(--neon-cyan),
+                0 0 20px var(--neon-cyan),
+                0 0 40px var(--neon-cyan),
+                0 0 80px var(--neon-cyan);
+        }
+
+        .neon-border {
+            box-shadow: 
+                0 0 5px var(--neon-cyan),
+                0 0 10px var(--neon-cyan),
+                inset 0 0 5px rgba(0, 243, 255, 0.2);
+            border: 1px solid var(--neon-cyan);
+        }
+
+        .neon-pink-glow {
+            box-shadow: 
+                0 0 10px var(--neon-pink),
+                0 0 20px var(--neon-pink),
+                0 0 40px var(--neon-pink);
+        }
+
+        /* Glassmorphism */
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .glass-card:hover {
+            border-color: var(--neon-cyan);
+            box-shadow: 
+                0 0 20px rgba(0, 243, 255, 0.3),
+                inset 0 0 20px rgba(0, 243, 255, 0.1);
+        }
+
+        /* Grid Pattern */
+        .grid-pattern {
+            background-image: 
+                linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+
+        /* Floating Animation */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .float-anim {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .pulse-anim {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        /* Skill Bars */
+        .skill-bar {
+            height: 4px;
+            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple));
+            border-radius: 2px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skill-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--dark-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--neon-cyan);
+            border-radius: 4px;
+        }
+
+        /* Navigation */
+        .nav-link {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--neon-cyan);
+            transition: width 0.3s;
+        }
+
+        .nav-link:hover::before {
+            width: 100%;
+        }
+
+        /* 3D Card Effect */
+        .card-3d {
+            transform-style: preserve-3d;
+            transition: transform 0.3s;
+        }
+
+        .card-3d:hover {
+            transform: rotateY(5deg) rotateX(5deg) translateZ(20px);
+        }
+
+        /* Timeline */
+        .timeline-line {
+            background: linear-gradient(to bottom, var(--neon-cyan), var(--neon-pink), var(--neon-purple));
+        }
+
+        /* Button Effects */
+        .neon-btn {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .neon-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .neon-btn:hover::before {
+            left: 100%;
+        }
+
+        .neon-btn:hover {
+            box-shadow: 
+                0 0 20px var(--neon-cyan),
+                0 0 40px var(--neon-cyan),
+                0 0 60px var(--neon-cyan);
+            transform: translateY(-2px);
+        }
+
+        /* Typewriter Effect */
+        .typewriter {
+            overflow: hidden;
+            border-right: 3px solid var(--neon-cyan);
+            white-space: nowrap;
+            animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+        }
+
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: var(--neon-cyan); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .typewriter {
+                white-space: normal;
+                border-right: none;
+                animation: none;
+            }
+        }
+    </style>
+<base target="_blank">
+</head>
+<body class="grid-pattern">
+    <!-- 3D Background Canvas -->
+    <div id="canvas-container"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 glass-card border-b border-cyan-500/20">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <div class="font-orbitron text-2xl font-bold neon-text">
+                    KF<span class="text-pink-500">.</span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#home" class="nav-link text-cyan-400 hover:text-white transition">Home</a>
+                    <a href="#about" class="nav-link text-cyan-400 hover:text-white transition">About</a>
+                    <a href="#skills" class="nav-link text-cyan-400 hover:text-white transition">Skills</a>
+                    <a href="#experience" class="nav-link text-cyan-400 hover:text-white transition">Experience</a>
+                    <a href="#education" class="nav-link text-cyan-400 hover:text-white transition">Education</a>
+                    <a href="#projects" class="nav-link text-cyan-400 hover:text-white transition">projects</a>
+                    <a href="#contact" class="nav-link text-cyan-400 hover:text-white transition">Contact</a>
+                </div>
+                <button class="md:hidden text-cyan-400 text-2xl" onclick="toggleMenu()">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden glass-card border-t border-cyan-500/20">
+            <div class="flex flex-col p-6 space-y-4">
+                <a href="#home" class="text-cyan-400 hover:text-white">Home</a>
+                <a href="#about" class="text-cyan-400 hover:text-white">About</a>
+                <a href="#skills" class="text-cyan-400 hover:text-white">Skills</a>
+                <a href="#experience" class="text-cyan-400 hover:text-white">Experience</a>
+                <a href="#education" class="text-cyan-400 hover:text-white">Education</a>
+                <a href="#projects" class="text-cyan-400 hover:text-white">Projects</a>
+                <a href="#contact" class="text-cyan-400 hover:text-white">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="min-h-screen flex items-center justify-center relative pt-20">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="order-2 md:order-1">
+                    <div class="inline-block px-4 py-2 rounded-full glass-card mb-6 float-anim">
+                        <span class="text-cyan-400 font-semibold">
+                            <i class="fas fa-code mr-2"></i>Available for Opportunities
+                        </span>
+                    </div>
+                    <h1 class="font-orbitron text-5xl md:text-7xl font-black mb-4">
+                        <span class="neon-text">KASHAF</span><br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-600">FATIMA</span>
+                    </h1>
+                    <div class="h-16 mb-6">
+                        <p class="typewriter text-xl md:text-2xl text-gray-300 font-light">
+                            Creative Technologist & Web devloper 
+                        </p>
+                    </div>
+                    <p class="text-gray-400 text-lg mb-8 leading-relaxed">
+                        Creative and detail-oriented Web Developer, Designer, and Educator with a strong passion for technology and learning. Skilled in developing user-friendly websites, designing visually appealing content, and simplifying complex concepts for students. Committed to delivering high-quality work and continuous self-improvement.
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="#contact" class="neon-btn px-8 py-4 bg-cyan-500/20 border border-cyan-400 rounded-full text-cyan-400 font-bold hover:bg-cyan-500/30 transition">
+                            <i class="fas fa-paper-plane mr-2"></i>Hire Me
+                        </a>
+                        <a href="#about" class="px-8 py-4 border border-pink-500 rounded-full text-pink-500 font-bold hover:bg-pink-500/20 transition neon-pink-glow">
+                            <i class="fas fa-user mr-2"></i>Learn More
+                        </a>
+                    </div>
+                    <div class="flex space-x-6 mt-8">
+                        <a href="https://github.com/kashafCodes-dev" class="text-2xl text-gray-400 hover:text-cyan-400 transition transform hover:scale-110">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/in/kashaf-fatima-b83314400/" class="text-2xl text-gray-400 hover:text-cyan-400 transition transform hover:scale-110">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="file:///C:/Users/GOGI%20LAPTOP'S/Music/TicTacToe/KASHEE,S%20MEHAR.html" class="text-2xl text-gray-400 hover:text-cyan-400 transition transform hover:scale-110">
+                            <i class="fab fa-dribbble"></i>
+                        </a>
+                        <a href="mailto:nooralavi81@gmail.com" class="text-2xl text-gray-400 hover:text-cyan-400 transition transform hover:scale-110">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="order-1 md:order-2 flex justify-center">
+                    <div class="relative w-80 h-80 md:w-96 md:h-96">
+                        <div class="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-500 to-purple-600 blur-3xl opacity-30 pulse-anim"></div>
+                        <div class="relative w-full h-full rounded-full glass-card border-2 border-cyan-400/10 overflow-hidden card-3d">
+                            <div class="absolute inset-0 bg-gradient-to-br from-cyan-500/10 to-purple-600/10"></div>
+                            <div class="flex items-center justify-center h-full">
+                                <div class="img-center">
+                                  
+</div>
+                                    <p class="mt-4 text-cyan-400 font-orbitron text-xl"><img src = "KF.JPG" height=1800 width=2000></p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Orbiting Elements -->
+                        <div class="absolute -top-4 -right-4 w-16 h-16 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 flex items-center justify-center float-anim" style="animation-delay: 1s;">
+                            <i class="fas fa-code text-white"></i>
+                        </div>
+                        <div class="absolute -bottom-4 -left-4 w-16 h-16 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 flex items-center justify-center float-anim" style="animation-delay: 2s;">
+                            <i class="fas fa-palette text-white"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2">
+            <div class="w-6 h-10 border-2 border-cyan-400 rounded-full flex justify-center">
+                <div class="w-1 h-3 bg-cyan-400 rounded-full mt-2 animate-bounce"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 relative">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="font-orbitron text-4xl md:text-5xl font-bold mb-4">
+                    <span class="neon-text">ABOUT</span> <span class="text-pink-500">ME</span>
+                </h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-cyan-500 to-pink-500 mx-auto"></div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="glass-card rounded-2xl p-8 card-3d hover:transform hover:scale-105 transition duration-300">
+                    <div class="w-16 h-16 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 flex items-center justify-center mb-6 neon-border">
+                        <i class="fas fa-laptop-code text-2xl text-white"></i>
+                    </div>
+                    <h3 class="font-orbitron text-xl font-bold mb-4 text-cyan-400">Web Development</h3>
+                    <p class="text-gray-400">Passionate about creating responsive, user-friendly websites with modern technologies and clean code practices.</p>
+                </div>
+
+                <div class="glass-card rounded-2xl p-8 card-3d hover:transform hover:scale-105 transition duration-300">
+                    <div class="w-16 h-16 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 flex items-center justify-center mb-6 neon-pink-glow">
+                        <i class="fas fa-paint-brush text-2xl text-white"></i>
+                    </div>
+                    <h3 class="font-orbitron text-xl font-bold mb-4 text-pink-500">Design</h3>
+                    <p class="text-gray-400">Creating visually appealing content with attention to detail, color theory, and modern design principles.</p>
+                </div>
+
+                <div class="glass-card rounded-2xl p-8 card-3d hover:transform hover:scale-105 transition duration-300">
+                    <div class="w-16 h-16 rounded-full bg-gradient-to-r from-purple-500 to-indigo-600 flex items-center justify-center mb-6" style="box-shadow: 0 0 20px #bc13fe;">
+                        <i class="fas fa-chalkboard-teacher text-2xl text-white"></i>
+                    </div>
+                    <h3 class="font-orbitron text-xl font-bold mb-4 text-purple-500">Education</h3>
+                    <p class="text-gray-400">Dedicated educator skilled in simplifying complex concepts and creating engaging learning experiences.</p>
+                </div>
+            </div>
+
+            <div class="mt-16 glass-card rounded-3xl p-8 md:p-12">
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <h3 class="font-orbitron text-3xl font-bold mb-6 text-cyan-400">Professional Summary</h3>
+                        <p class="text-gray-300 text-lg leading-relaxed mb-6">
+                            Creative and detail-oriented Web Developer, Designer, and Educator with a strong passion for technology and learning. Skilled in developing user-friendly websites, designing visually appealing content, and simplifying complex concepts for students. Committed to delivering high-quality work and continuous self-improvement.
+                        </p>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-check-circle text-cyan-400"></i>
+                                <span class="text-gray-300">Problem Solver</span>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-check-circle text-cyan-400"></i>
+                                <span class="text-gray-300">Team Player</span>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-check-circle text-cyan-400"></i>
+                                <span class="text-gray-300">Fast Learner</span>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-check-circle text-cyan-400"></i>
+                                <span class="text-gray-300">Detail Oriented</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="glass-card rounded-xl p-6 text-center">
+                            <div class="text-4xl font-orbitron font-bold text-cyan-400 mb-2"><i class="fas fa-infinity"></i></div>
+                            <div class="text-gray-400">Passion for Learning</div>
+                        </div>
+                        <div class="glass-card rounded-xl p-6 text-center">
+                            <div class="text-4xl font-orbitron font-bold text-pink-500 mb-2"><i class="fas fa-rocket"></i></div>
+                            <div class="text-gray-400">Continuous Growth</div>
+                        </div>
+                        <div class="glass-card rounded-xl p-6 text-center">
+                            <div class="text-4xl font-orbitron font-bold text-purple-500 mb-2"><i class="fas fa-heart"></i></div>
+                            <div class="text-gray-400">Dedicated</div>
+                        </div>
+                        <div class="glass-card rounded-xl p-6 text-center">
+                            <div class="text-4xl font-orbitron font-bold text-blue-500 mb-2">100%</div>
+                            <div class="text-gray-400">Commitment</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="py-20 relative">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="font-orbitron text-4xl md:text-5xl font-bold mb-4">
+                    <span class="neon-text">TECHNICAL</span> <span class="text-pink-500">SKILLS</span>
+                </h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-cyan-500 to-pink-500 mx-auto"></div>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Programming -->
+                <div class="glass-card rounded-2xl p-8">
+                    <h3 class="font-orbitron text-xl font-bold mb-6 text-cyan-400 flex items-center">
+                        <i class="fas fa-code mr-3"></i>Programming
+                    </h3>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-300">C++</span>
+                                <span class="text-cyan-400">85%</span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                <div class="skill-bar" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-300">HTML5</span>
+                                <span class="text-cyan-400">90%</span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                <div class="skill-bar" style="width: 90%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-300">CSS3</span>
+                                <span class="text-cyan-400">85%</span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                <div class="skill-bar" style="width: 85%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tools & Software -->
+                <div class="glass-card rounded-2xl p-8">
+                    <h3 class="font-orbitron text-xl font-bold mb-6 text-pink-500 flex items-center">
+                        <i class="fas fa-tools mr-3"></i>Tools & Software
+                    </h3>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-300">MS Office</span>
+                                <span class="text-pink-500">95%</span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                <div class="skill-bar" style="width: 95%; background: linear-gradient(90deg, #ff00ff, #bc13fe);"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-300">Adobe AI</span>
+                                <span class="text-pink-500">80%</span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                <div class="skill-bar" style="width: 80%; background: linear-gradient(90deg, #ff00ff, #bc13fe);"></div>
+                            </div>
+    <div class="flex justify-between mb-2">
+                                <span class="text-gray-300">Adobe PS</span>
+                                <span class="text-pink-500">80%</span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                <div class="skill-bar" style="width: 80%; background: linear-gradient(90deg, #ff00ff, #bc13fe);"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-300">Office Management</span>
+                                <span class="text-pink-500">90%</span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                <div class="skill-bar" style="width: 90%; background: linear-gradient(90deg, #ff00ff, #bc13fe);"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Soft Skills -->
+                <div class="glass-card rounded-2xl p-8">
+                    <h3 class="font-orbitron text-xl font-bold mb-6 text-purple-500 flex items-center">
+                        <i class="fas fa-users mr-3"></i>Soft Skills
+                    </h3>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-300">Communication</span>
+                                <span class="text-purple-500">95%</span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                <div class="skill-bar" style="width: 95%; background: linear-gradient(90deg, #bc13fe, #0066ff);"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-300">Public Dealing</span>
+                                <span class="text-purple-500">90%</span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                <div class="skill-bar" style="width: 90%; background: linear-gradient(90deg, #bc13fe, #0066ff);"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-300">HR Management</span>
+                                <span class="text-purple-500">75%</span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                <div class="skill-bar" style="width: 75%; background: linear-gradient(90deg, #bc13fe, #0066ff);"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Skills Grid -->
+            <div class="mt-8 grid md:grid-cols-4 gap-4">
+                <div class="glass-card rounded-xl p-4 text-center">
+                    <i class="fas fa-file-word text-3xl text-cyan-400 mb-2"></i>
+                    <p class="text-gray-300 font-semibold">MS Word</p>
+                </div>
+                <div class="glass-card rounded-xl p-4 text-center">
+                    <i class="fas fa-file-excel text-3xl text-green-400 mb-2"></i>
+                    <p class="text-gray-300 font-semibold">MS Excel</p>
+                </div>
+                <div class="glass-card rounded-xl p-4 text-center">
+                    <i class="fas fa-file-powerpoint text-3xl text-orange-400 mb-2"></i>
+                    <p class="text-gray-300 font-semibold">MS PowerPoint</p>
+                </div>
+                <div class="glass-card rounded-xl p-4 text-center">
+                    <i class="fas fa-envelope text-3xl text-blue-400 mb-2"></i>
+                    <p class="text-gray-300 font-semibold">MS Outlook</p>
+                </div>
+                <div class="glass-card rounded-xl p-4 text-center">
+                    <i class="fas fa-briefcase text-3xl text-pink-400 mb-2"></i>
+                    <p class="text-gray-300 font-semibold">Office Management</p>
+                </div>
+                <div class="glass-card rounded-xl p-4 text-center">
+                    <i class="fas fa-certificate text-3xl text-purple-400 mb-2"></i>
+                    <p class="text-gray-300 font-semibold">CCA Certified</p>
+                </div>
+                <div class="glass-card rounded-xl p-4 text-center">
+                    <i class="fas fa-users-cog text-3xl text-yellow-400 mb-2"></i>
+                    <p class="text-gray-300 font-semibold">Team Management</p>
+                </div>
+                <div class="glass-card rounded-xl p-4 text-center">
+                    <i class="fas fa-headset text-3xl text-red-400 mb-2"></i>
+                    <p class="text-gray-300 font-semibold">Customer Support</p>
+                </div>
+            </div>
+<section id="projects" class="py-20">
+    <div class="container mx-auto px-6">
+
+        <div class="text-center mb-16">
+            <h2 class="font-orbitron text-4xl md:text-5xl font-bold">
+                <span class="neon-text">MY</span> <span class="text-pink-500">PROJECTS</span>
+            </h2>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-8">
+
+            <!-- Tic Tac Toe -->
+            <div class="glass-card p-8 rounded-2xl card-3d">
+                <h3 class="text-cyan-400 text-2xl font-bold mb-4">Tic Tac Toe Game</h3>
+                <p class="text-gray-400 mb-4">
+                    Interactive browser-based game with real-time logic, win detection, and smooth UI.
+                </p>
+
+                <div class="mb-4">
+                    <span class="text-sm bg-cyan-500/20 px-3 py-1 rounded-full">HTML</span>
+                    <span class="text-sm bg-pink-500/20 px-3 py-1 rounded-full">CSS</span>
+                    <span class="text-sm bg-purple-500/20 px-3 py-1 rounded-full">JavaScript</span>
+                </div>
+
+                <p class="text-gray-500 text-sm mb-4">
+                    Built complete game logic independently with responsive design.
+                </p>
+
+                <button class="neon-btn px-6 py-2 border border-cyan-400 rounded-full text-cyan-400">
+<a href="index.html" target="_blank" class="btn">View Project</a>
+                   
+                </button>
+            </div>
+
+            <!-- Calculator -->
+            <div class="glass-card p-8 rounded-2xl card-3d">
+                <h3 class="text-pink-500 text-2xl font-bold mb-4">Sea Theme Calculator</h3>
+                <p class="text-gray-400 mb-4">
+                    Advanced animated calculator with deep-sea theme, glowing UI, and smooth interactions.
+                </p>
+
+                <div class="mb-4">
+                    <span class="text-sm bg-cyan-500/20 px-3 py-1 rounded-full">HTML</span>
+                    <span class="text-sm bg-pink-500/20 px-3 py-1 rounded-full">CSS</span>
+                    <span class="text-sm bg-purple-500/20 px-3 py-1 rounded-full">JavaScript</span>
+                </div>
+
+                <p class="text-gray-500 text-sm mb-4">
+                    Designed immersive UI with animations and functional calculator logic.
+                </p>
+
+                <button class="neon-btn px-6 py-2 border border-pink-500 rounded-full text-pink-500">
+<a href="deep-sea-calc.html" target="_blank" class="btn">View Project</a>
+                
+                </button>
+            </div>
+  <!-- TO-DO-LIST -->
+            <div class="glass-card p-8 rounded-2xl card-3d">
+                <h3 class="text-pink-500 text-2xl font-bold mb-4">TO-DO-LIST</h3>
+                <p class="text-gray-400 mb-4">
+                    A modern task management app with smooth animations, clean UI, and productivity-focused design.
+                </p>
+
+                <div class="mb-4">
+                    <span class="text-sm bg-cyan-500/20 px-3 py-1 rounded-full">HTML</span>
+                    <span class="text-sm bg-pink-500/20 px-3 py-1 rounded-full">CSS</span>
+                    <span class="text-sm bg-purple-500/20 px-3 py-1 rounded-full">JavaScript</span>
+                </div>
+
+                <p class="text-gray-500 text-sm mb-4">
+               Built with dynamic task handling, local storage support, and interactive user experience for daily productivity.
+    </p>
+                </p>
+
+                <button class="neon-btn px-6 py-2 border border-pink-500 rounded-full text-pink-500">
+<a href="standalone.html" target="_blank" class="btn">View Project</a>
+                
+                </button>
+            </div>
+
+
+        </div>
+    </div>
+</section>
+
+            <!-- Language Skills -->
+            <div class="mt-12 glass-card rounded-2xl p-8">
+                <h3 class="font-orbitron text-2xl font-bold mb-8 text-center text-cyan-400">Languages</h3>
+                <div class="flex justify-center space-x-12">
+                    <div class="text-center">
+                        <div class="w-24 h-24 rounded-full border-4 border-cyan-400 flex items-center justify-center mb-4 relative">
+                            <div class="absolute inset-0 rounded-full border-4 border-cyan-400 border-t-transparent animate-spin" style="animation-duration: 3s;"></div>
+                            <span class="text-2xl font-bold text-cyan-400">100%</span>
+                        </div>
+                        <span class="text-gray-300 font-semibold">Urdu</span>
+                        <p class="text-sm text-gray-500">Native</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-24 h-24 rounded-full border-4 border-pink-500 flex items-center justify-center mb-4 relative">
+                            <div class="absolute inset-0 rounded-full border-4 border-pink-500 border-t-transparent animate-spin" style="animation-duration: 3s;"></div>
+                            <span class="text-2xl font-bold text-pink-500">85%</span>
+                        </div>
+                        <span class="text-gray-300 font-semibold">English</span>
+                        <p class="text-sm text-gray-500">Professional</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience" class="py-20 relative">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="font-orbitron text-4xl md:text-5xl font-bold mb-4">
+                    <span class="neon-text">WORK</span> <span class="text-pink-500">EXPERIENCE</span>
+                </h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-cyan-500 to-pink-500 mx-auto"></div>
+            </div>
+
+            <div class="max-w-4xl mx-auto">
+                <div class="relative">
+                    <!-- Timeline Line -->
+                    <div class="absolute left-8 top-0 bottom-0 w-1 timeline-line rounded-full"></div>
+
+                    <!-- Experience Item 1 - Rhombix Technologies -->
+                    <div class="relative pl-20 pb-12">
+                        <div class="absolute left-4 top-0 w-9 h-9 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 border-4 border-gray-900 z-10 flex items-center justify-center">
+                            <i class="fas fa-building text-white text-sm"></i>
+                        </div>
+                        <div class="glass-card rounded-2xl p-8 card-3d hover:border-cyan-400 transition">
+                            <div class="flex flex-wrap justify-between items-start mb-4">
+                                <div>
+                                    <h3 class="font-orbitron text-2xl font-bold text-cyan-400">Internship</h3>
+                                    <p class="text-pink-500 font-semibold mt-1">Rhombix Technologies</p>
+                                </div>
+                                <span class="px-4 py-2 rounded-full bg-cyan-500/20 text-cyan-400 text-sm font-semibold border border-cyan-400/30">
+                                    4 Months
+                                </span>
+                            </div>
+                            <ul class="space-y-3 text-gray-300">
+                                <li class="flex items-start">
+                                    <i class="fas fa-caret-right text-cyan-400 mt-1 mr-3"></i>
+                                    <span>Hands-on experience in software development and IT operations</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-caret-right text-cyan-400 mt-1 mr-3"></i>
+                                    <span>Collaborated with development team on real-world projects</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-caret-right text-cyan-400 mt-1 mr-3"></i>
+                                    <span>Gained practical knowledge of industry-standard tools and practices</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-caret-right text-cyan-400 mt-1 mr-3"></i>
+                                    <span>Enhanced technical skills in a professional environment</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+  <!-- Experience Item 2 - Academic & Technical Experience -->
+                    <div class="relative pl-20 pb-12">
+                        <div class="absolute left-4 top-0 w-9 h-9 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 border-4 border-gray-900 z-10 flex items-center justify-center">
+                            <i class="fas fa-building text-white text-sm"></i>
+                        </div>
+                        <div class="glass-card rounded-2xl p-8 card-3d hover:border-cyan-400 transition">
+                            <div class="flex flex-wrap justify-between items-start mb-4">
+                                <div>
+                                    <h3 class="font-orbitron text-2xl font-bold text-cyan-400">Student Experience</h3>
+                                    <p class="text-pink-500 font-semibold mt-1">Government Technical College, Faisalabad</p>
+                                </div>
+                                <span class="px-4 py-2 rounded-full bg-cyan-500/20 text-cyan-400 text-sm font-semibold border border-cyan-400/30">
+                                   2025 – 2026
+                                </span>
+                            </div>
+                            <ul class="space-y-3 text-gray-300">
+                                <li class="flex items-start">
+                                    <i class="fas fa-caret-right text-cyan-400 mt-1 mr-3"></i>
+                                    <span>Worked on web development projects using HTML, CSS, and JavaScript along with strong practice</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-caret-right text-cyan-400 mt-1 mr-3"></i>
+                                    <span>Improved problem-solving, creativity, and technical skills through practical college work</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-caret-right text-cyan-400 mt-1 mr-3"></i>
+                                    <span>Gained practical knowledge and practices</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-caret-right text-cyan-400 mt-1 mr-3"></i>
+                                    <span>Enhanced technical skills in a professional environment</span>
+                                </li>
+ <li class="flex items-start">
+                                    <i class="fas fa-caret-right text-cyan-400 mt-1 mr-3"></i>
+                                    <span>Designed structured documents and presentations for academic use</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Experience Item 2 - Teaching -->
+                    <div class="relative pl-20 pb-12">
+                        <div class="absolute left-4 top-0 w-9 h-9 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 border-4 border-gray-900 z-10 flex items-center justify-center">
+                            <i class="fas fa-school text-white text-sm"></i>
+                        </div>
+                        <div class="glass-card rounded-2xl p-8 card-3d hover:border-pink-500 transition">
+                            <div class="flex flex-wrap justify-between items-start mb-4">
+                                <div>
+                                    <h3 class="font-orbitron text-2xl font-bold text-pink-500">Academy Teaching Experience</h3>
+                                    <p class="text-purple-500 font-semibold mt-1">Faisalabad, Pakistan</p>
+                                </div>
+                                <span class="px-4 py-2 rounded-full bg-pink-500/20 text-pink-500 text-sm font-semibold border border-pink-500/30">
+                                    Present
+                                </span>
+                            </div>
+                            <ul class="space-y-3 text-gray-300">
+                                <li class="flex items-start">
+                                    <i class="fas fa-caret-right text-pink-500 mt-1 mr-3"></i>
+                                    <span>Interactive teaching methods for playgroup and primary students</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-caret-right text-pink-500 mt-1 mr-3"></i>
+                                    <span>Lesson planning and curriculum development</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-caret-right text-pink-500 mt-1 mr-3"></i>
+                                    <span>Creating engaging learning environments</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-caret-right text-pink-500 mt-1 mr-3"></i>
+                                    <span>Student progress tracking and parent communication</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Experience Item 3 - Play Group -->
+                    <div class="relative pl-20">
+                        <div class="absolute left-4 top-0 w-9 h-9 rounded-full bg-gradient-to-r from-purple-500 to-indigo-600 border-4 border-gray-900 z-10 flex items-center justify-center">
+                            <i class="fas fa-child text-white text-sm"></i>
+                        </div>
+                        <div class="glass-card rounded-2xl p-8 card-3d hover:border-purple-500 transition">
+                            <div class="flex flex-wrap justify-between items-start mb-4">
+                                <div>
+                                    <h3 class="font-orbitron text-2xl font-bold text-purple-500">Play Group Specialist</h3>
+                                    <p class="text-indigo-500 font-semibold mt-1">Early Childhood Education</p>
+                                </div>
+                                <span class="px-4 py-2 rounded-full bg-purple-500/20 text-purple-500 text-sm font-semibold border border-purple-500/30">
+                                    Experience
+                                </span>
+                            </div>
+                            <ul class="space-y-3 text-gray-300">
+                                <li class="flex items-start">
+                                    <i class="fas fa-caret-right text-purple-500 mt-1 mr-3"></i>
+                                    <span>Specialized in early childhood education and development</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-caret-right text-purple-500 mt-1 mr-3"></i>
+                                    <span>Activity-based learning program design</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-caret-right text-purple-500 mt-1 mr-3"></i>
+                                    <span>Creative arts and crafts integration in curriculum</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Education Section -->
+    <section id="education" class="py-20 relative">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="font-orbitron text-4xl md:text-5xl font-bold mb-4">
+                    <span class="neon-text">EDUCATION</span> <span class="text-pink-500">JOURNEY</span>
+                </h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-cyan-500 to-pink-500 mx-auto"></div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- BS IT -->
+                <div class="glass-card rounded-2xl p-8 card-3d relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-cyan-500 to-blue-600 opacity-10 rounded-full transform translate-x-16 -translate-y-16 group-hover:scale-150 transition duration-500"></div>
+                    <div class="relative">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 flex items-center justify-center mb-6 neon-border">
+                            <i class="fas fa-graduation-cap text-2xl text-white"></i>
+                        </div>
+                        <span class="inline-block px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-400 text-sm font-semibold mb-4">
+                            2024 - 2028
+                        </span>
+                        <h3 class="font-orbitron text-xl font-bold text-white mb-2">BS Information Technology</h3>
+                        <p class="text-cyan-400 font-semibold mb-4">Virtual University of Pakistan</p>
+                        <p class="text-gray-400 text-sm">Currently pursuing bachelor's degree in IT with focus on software development and web technologies.</p>
+                        <div class="mt-6 flex items-center text-cyan-400">
+                            <i class="fas fa-clock mr-2"></i>
+                            <span class="text-sm">Continue (Will Complete 2028)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FSc -->
+                <div class="glass-card rounded-2xl p-8 card-3d relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-pink-500 to-purple-600 opacity-10 rounded-full transform translate-x-16 -translate-y-16 group-hover:scale-150 transition duration-500"></div>
+                    <div class="relative">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 flex items-center justify-center mb-6 neon-pink-glow">
+                            <i class="fas fa-atom text-2xl text-white"></i>
+                        </div>
+                        <span class="inline-block px-3 py-1 rounded-full bg-pink-500/20 text-pink-500 text-sm font-semibold mb-4">
+                            2022 - 2024
+                        </span>
+                        <h3 class="font-orbitron text-xl font-bold text-white mb-2">FSc Pre-Engineering</h3>
+                        <p class="text-pink-500 font-semibold mb-4">Government College, Faisalabad</p>
+                        <p class="text-gray-400 text-sm">Completed pre-engineering with strong foundation in mathematics and physics.</p>
+                        <div class="mt-6 flex items-center text-pink-500">
+                            <i class="fas fa-trophy mr-2"></i>
+                            <span class="text-sm">Merit Certificate</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Matric -->
+                <div class="glass-card rounded-2xl p-8 card-3d relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-purple-500 to-indigo-600 opacity-10 rounded-full transform translate-x-16 -translate-y-16 group-hover:scale-150 transition duration-500"></div>
+                    <div class="relative">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-r from-purple-500 to-indigo-600 flex items-center justify-center mb-6" style="box-shadow: 0 0 20px #bc13fe;">
+                            <i class="fas fa-flask text-2xl text-white"></i>
+                        </div>
+                        <span class="inline-block px-3 py-1 rounded-full bg-purple-500/20 text-purple-500 text-sm font-semibold mb-4">
+                            2020 - 2022
+                        </span>
+                        <h3 class="font-orbitron text-xl font-bold text-white mb-2">Matriculation Science</h3>
+                        <p class="text-purple-500 font-semibold mb-4">Government School, Faisalabad</p>
+                        <p class="text-gray-400 text-sm">Completed secondary education with science subjects, building foundation for technical career.</p>
+                        <div class="mt-6 flex items-center text-purple-500">
+                            <i class="fas fa-award mr-2"></i>
+                            <span class="text-sm">Science Exhibition Winner</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Awards -->
+            <div class="mt-12 glass-card rounded-2xl p-8">
+                <h3 class="font-orbitron text-2xl font-bold mb-8 text-center text-cyan-400">
+                    <i class="fas fa-award mr-3"></i>Awards & Certifications
+                </h3>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="flex items-center space-x-4 p-4 rounded-xl bg-gradient-to-r from-cyan-500/10 to-transparent border border-cyan-500/20">
+                        <div class="w-12 h-12 rounded-full bg-cyan-500/20 flex items-center justify-center">
+                            <i class="fas fa-microscope text-cyan-400 text-xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-white">Science Exhibition</h4>
+                            <p class="text-gray-400 text-sm">Winner - Innovative Project Presentation</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-4 p-4 rounded-xl bg-gradient-to-r from-pink-500/10 to-transparent border border-pink-500/20">
+                        <div class="w-12 h-12 rounded-full bg-pink-500/20 flex items-center justify-center">
+                            <i class="fas fa-certificate text-pink-500 text-xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-white">Merit Certificate</h4>
+                            <p class="text-gray-400 text-sm">Academic Excellence in FSc</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hobbies & Interests -->
+    <section class="py-20 relative">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="font-orbitron text-4xl md:text-5xl font-bold mb-4">
+                    <span class="neon-text">PASSIONS</span> <span class="text-pink-500">& HOBBIES</span>
+                </h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-cyan-500 to-pink-500 mx-auto"></div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="glass-card rounded-2xl p-8 text-center card-3d group">
+                    <div class="w-20 h-20 mx-auto rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 flex items-center justify-center mb-6 group-hover:scale-110 transition duration-300 neon-border">
+                        <i class="fas fa-pencil-alt text-3xl text-white"></i>
+                    </div>
+                    <h3 class="font-orbitron text-xl font-bold text-cyan-400 mb-2">Drawing</h3>
+                    <p class="text-gray-400">Creative expression through visual arts and illustration</p>
+                </div>
+
+                <div class="glass-card rounded-2xl p-8 text-center card-3d group">
+                    <div class="w-20 h-20 mx-auto rounded-full bg-gradient-to-r from-pink-500 to-purple-600 flex items-center justify-center mb-6 group-hover:scale-110 transition duration-300 neon-pink-glow">
+                        <i class="fas fa-cut text-3xl text-white"></i>
+                    </div>
+                    <h3 class="font-orbitron text-xl font-bold text-pink-500 mb-2">Crafting</h3>
+                    <p class="text-gray-400">Handmade creations and DIY project development</p>
+                </div>
+
+                <div class="glass-card rounded-2xl p-8 text-center card-3d group">
+                    <div class="w-20 h-20 mx-auto rounded-full bg-gradient-to-r from-purple-500 to-indigo-600 flex items-center justify-center mb-6 group-hover:scale-110 transition duration-300" style="box-shadow: 0 0 20px #bc13fe;">
+                        <i class="fas fa-paint-brush text-3xl text-white"></i>
+                    </div>
+                    <h3 class="font-orbitron text-xl font-bold text-purple-500 mb-2">Sketching</h3>
+                    <p class="text-gray-400">Detailed artwork and portrait sketching</p>
+                </div>
+            </div>
+        </div>
+    </section>
+<!-- Testimonials Section -->
+<section id="testimonials" class="py-20 relative">
+    <div class="container mx-auto px-6">
+        <div class="text-center mb-16">
+            <h2 class="font-orbitron text-4xl md:text-5xl font-bold mb-4">
+                <span class="neon-text">CLIENT</span> <span class="text-pink-500">TESTIMONIALS</span>
+            </h2>
+            <div class="w-24 h-1 bg-gradient-to-r from-cyan-500 to-pink-500 mx-auto"></div>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8">
+
+            <!-- Testimonial 1 -->
+            <div class="glass-card rounded-2xl p-8 card-3d text-center">
+                <div class="text-cyan-400 text-4xl mb-4">
+                    <i class="fas fa-quote-left"></i>
+                </div>
+                <p class="text-gray-300 mb-6">
+                    Kashaf is a very talented developer. Her work is clean, creative, and always delivered on time.
+                </p>
+                <h4 class="text-cyan-400 font-bold">Project Mentor</h4>
+                <p class="text-gray-500 text-sm">Instructor</p>
+            </div>
+
+            <!-- Testimonial 2 -->
+            <div class="glass-card rounded-2xl p-8 card-3d text-center">
+                <div class="text-pink-500 text-4xl mb-4">
+                    <i class="fas fa-quote-left"></i>
+                </div>
+                <p class="text-gray-300 mb-6">
+                    Her creativity and design sense are outstanding. She creates visually stunning interfaces.
+                </p>
+                <h4 class="text-pink-500 font-bold">Team Member</h4>
+                <p class="text-gray-500 text-sm">Collaboration Project</p>
+            </div>
+
+            <!-- Testimonial 3 -->
+            <div class="glass-card rounded-2xl p-8 card-3d text-center">
+                <div class="text-purple-500 text-4xl mb-4">
+                    <i class="fas fa-quote-left"></i>
+                </div>
+                <p class="text-gray-300 mb-6">
+                    A dedicated and hardworking individual with strong problem-solving skills and a passion for learning.
+                </p>
+                <h4 class="text-purple-500 font-bold">Supervisor</h4>
+                <p class="text-gray-500 text-sm">Internship</p>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 relative">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="font-orbitron text-4xl md:text-5xl font-bold mb-4">
+                    <span class="neon-text">GET IN</span> <span class="text-pink-500">TOUCH</span>
+                </h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-cyan-500 to-pink-500 mx-auto mb-4"></div>
+                <p class="text-gray-400">Let's create something amazing together</p>
+            </div>
+
+            <div class="max-w-4xl mx-auto">
+                <div class="glass-card rounded-3xl p-8 md:p-12">
+                    <div class="grid md:grid-cols-2 gap-12">
+                        <div>
+                            <h3 class="font-orbitron text-2xl font-bold text-cyan-400 mb-6">Contact Information</h3>
+                            <div class="space-y-6">
+                                <div class="flex items-center space-x-4">
+                                    <div class="w-12 h-12 rounded-full bg-cyan-500/20 flex items-center justify-center neon-border">
+                                        <i class="fas fa-envelope text-cyan-400"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-400 text-sm">Email</p>
+                                        <p class="text-white font-semibold">nooralavi81@gmail.com</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-4">
+                                    <div class="w-12 h-12 rounded-full bg-pink-500/20 flex items-center justify-center neon-pink-glow">
+                                        <i class="fas fa-phone text-pink-500"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-400 text-sm">Phone</p>
+                                        <p class="text-white font-semibold">0333-6419950</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-4">
+                                    <div class="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center" style="box-shadow: 0 0 10px #bc13fe;">
+                                        <i class="fas fa-map-marker-alt text-purple-500"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-400 text-sm">Location</p>
+                                        <p class="text-white font-semibold"> Faisalabad</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-4">
+                                    <div class="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center" style="box-shadow: 0 0 10px #0066ff;">
+                                        <i class="fas fa-id-card text-blue-500"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-400 text-sm">CNIC</p>
+                                        <p class="text-white font-semibold">33104-******-*</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="font-orbitron text-2xl font-bold text-pink-500 mb-6">Send Message</h3>
+                            <form class="space-y-4">
+                                <div>
+                                    <input type="text" placeholder="Your Name" class="w-full px-6 py-4 rounded-full bg-gray-800/50 border border-gray-700 text-white placeholder-gray-500 focus:border-cyan-400 focus:outline-none transition">
+                                </div>
+                                <div>
+                                    <input type="email" placeholder="Your Email" class="w-full px-6 py-4 rounded-full bg-gray-800/50 border border-gray-700 text-white placeholder-gray-500 focus:border-cyan-400 focus:outline-none transition">
+                                </div>
+                                <div>
+                                    <textarea placeholder="Your Message" rows="4" class="w-full px-6 py-4 rounded-2xl bg-gray-800/50 border border-gray-700 text-white placeholder-gray-500 focus:border-cyan-400 focus:outline-none transition resize-none"></textarea>
+                                </div>
+                                <button type="submit" class="w-full neon-btn px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-full text-white font-bold hover:shadow-lg transition">
+                                    <i class="fas fa-paper-plane mr-2"></i>Send Message
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-8 border-t border-gray-800">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="font-orbitron text-2xl font-bold neon-text mb-4 md:mb-0">
+                    KF<span class="text-pink-500">.</span>
+                </div>
+                <p class="text-gray-500 text-center md:text-right">
+                    © KASHEE,S MEHAR<br>
+                    <span class="text-cyan-400">Designed with passion & code</span>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Smooth Scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    // Close mobile menu if open
+                    document.getElementById('mobile-menu').classList.add('hidden');
+                }
+            });
+        });
+
+        // Three.js Background Animation
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+        // Create particles
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCount = 1500;
+        const posArray = new Float32Array(particlesCount * 3);
+
+        for(let i = 0; i < particlesCount * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 100;
+        }
+
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+
+        const particlesMaterial = new THREE.PointsMaterial({
+            size: 0.02,
+            color: 0x00f3ff,
+            transparent: true,
+            opacity: 0.8,
+            blending: THREE.AdditiveBlending
+        });
+
+        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particlesMesh);
+
+        camera.position.z = 5;
+
+        // Mouse movement effect
+        let mouseX = 0;
+        let mouseY = 0;
+
+        document.addEventListener('mousemove', (event) => {
+            mouseX = event.clientX / window.innerWidth - 0.5;
+            mouseY = event.clientY / window.innerHeight - 0.5;
+        });
+
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+
+            particlesMesh.rotation.y += 0.001;
+            particlesMesh.rotation.x += 0.001;
+
+            particlesMesh.rotation.x += mouseY * 0.05;
+            particlesMesh.rotation.y += mouseX * 0.05;
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // GSAP Animations
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Animate cards on scroll
+        gsap.utils.toArray('.glass-card').forEach((card, i) => {
+            gsap.from(card, {
+                scrollTrigger: {
+                    trigger: card,
+                    start: 'top 85%',
+                    toggleActions: 'play none none reverse'
+                },
+                y: 50,
+                opacity: 0,
+                duration: 0.8,
+                delay: i * 0.1,
+                ease: 'power3.out'
+            });
+        });
+
+        // Animate skill bars
+        gsap.utils.toArray('.skill-bar').forEach(bar => {
+            const width = bar.style.width;
+            bar.style.width = '0%';
+            gsap.to(bar, {
+                scrollTrigger: {
+                    trigger: bar,
+                    start: 'top 90%',
+                    toggleActions: 'play none none reverse'
+                },
+                width: width,
+                duration: 1.5,
+                ease: 'power2.out'
+            });
+        });
+
+        // Neon text pulse animation
+        gsap.to('.neon-text', {
+            textShadow: '0 0 20px #00f3ff, 0 0 40px #00f3ff, 0 0 60px #00f3ff, 0 0 80px #00f3ff',
+            duration: 2,
+            repeat: -1,
+            yoyo: true,
+            ease: 'sine.inOut'
+        });
+
+        // Parallax effect for hero
+        gsap.to('#home .float-anim', {
+            scrollTrigger: {
+                trigger: '#home',
+                start: 'top top',
+                end: 'bottom top',
+                scrub: 1
+            },
+            y: 100,
+            ease: 'none'
+        });
+    </script>
+</body>
+</html>
